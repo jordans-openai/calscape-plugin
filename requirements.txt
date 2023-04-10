@@ -1,0 +1,6 @@
+beautifulsoup4
+httpx
+quart
+quart-cors
+requests
+jinja2
