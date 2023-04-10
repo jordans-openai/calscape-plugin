@@ -1,0 +1,397 @@
+openapi: 3.0.3
+info:
+  title: CalScape Plant Search API
+  version: 1.0.1
+
+paths:
+  /detail/{slug}:
+    get:
+      summary: Get plant details by plant name
+      description: Fetches plant details using the plant name and returns the parsed data as JSON.
+      operationId: getPlantDetails
+      parameters:
+        - name: slug
+          in: path
+          description: >
+            Name of the plant. IMPORTANT: Must match the `slug` field on a record from the /search endpoint
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Plant details successfully fetched and parsed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlantDetails'
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
+
+  /search:
+    post:
+      summary: Search for plants based on selected characteristics
+      operationId: searchPlants
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newsearch:
+                  type: integer
+                  description: A flag to indicate a new search (should be set to 1)
+                usr_loc_name:
+                  type: string
+                  description: >
+                    Native location of the plant as a lat/lon pair and full name in parens. Example:
+                    38.4169, -122.3443 (1467 Yountville Cross Rd, Yountville, CA 94599, USA)
+                plant_type:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Type of the plant. Possible values are "Annual herb", "Fern", "Grass",
+                    "Perennial herb", "Shrub", "Succulent", "Tree", "Vine".
+                sun:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Sunlight requirements of the plant. Possible values are "Full Sun",
+                    "Part Shade", "Full Shade".
+                drainage:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Drainage requirements of the plant. Possible values are "Fast", "Medium",
+                    "Slow", "Standing".
+                drought:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Water requirements of the plant. Possible values are "Extremely Low",
+                    "Very Low", "Low", "Moderate - High".
+                ease_of_growing:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Ease of care for the plant. Possible values are "Very Easy", "Moderately Easy",
+                    "Fairly Difficult", "Very Difficult".
+                common_uses:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Common uses for the plant. Possible values are "Bank Stabilization", "Bee Gardens",
+                    "Bird Gardens", "Bogs and Ponds", "Butterfly Gardens", "Butterfly Host Plants",
+                    "Deer Resistant", "Groundcovers", "Hedges", "Hummingbird Gardens".
+                ease_of_finding:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Availability of the plant in nurseries. Possible values are "Commonly Available",
+                    "Sometimes Available", "Rarely Available", "Never or Almost Never Available",
+                    "Available Through Seed Stores".
+                fragrance:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Fragrance of the plant. Possible values are "Fragrant - Pleasant",
+                    "Fragrant - Unpleasant", "None", "Slight".
+                flower:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Flower color of the plant. Possible values are "Black", "Blue", "Brown", "Cream",
+                    "Green", "Lavender", "Orange", "Pink", "Purple", "Red", "White", "Yellow".
+                flower_season:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    Flowering season of the plant. Possible values are "Spring", "Summer", "Fall", "Winter".
+                max_height_from:
+                  type: string
+                  description: Minimum height of the plant in the selected unit (either feet or inches)
+                max_height_to:
+                  type: string
+                  description: Maximum height of the plant in the selected unit (either feet or inches)
+                max_height_unit:
+                  type: string
+                  description: Unit for the height range, either "feet" or "inches"
+                nurseries:
+                  type: array
+                  items:
+                    type: string
+                  description: >
+                    A list of nurseries where the plant can be found. Each entry should be a nursery ID
+                    associated with a specific nursery name. Possible values include:
+                    - "402" (3 Rivers Blooms)
+                    - "260" (Ackerman Native Plant Nursery)
+                    - "454" (Alladin Nursery & Gift Shop)
+                    - "490" (Almaden Valley Nursery)
+                    - "504" (Alta Vista Nursery)
+                    - "405" (Annie's Annuals and Perennials)
+                    - "211" (Antelope Valley Resource Conservation Nursery)
+                    - "441" (Arboretum & Gardens' Nursery at Turtle Bay Exploration Park)
+                    - "373" (Artemisia Nursery)
+                    - "283" (Aspen Hollow Nursery)
+                    - "257" (Back to Natives Nursery @ Santiago Park)
+                    - "489" (Bay Natives)
+                    - "163" (Bay Natives)
+                    - "530" (Bay West Nursery)
+                    - "272" (Baylands Nursery)
+                    - "295" (Belmont Nursery)
+                    - "212" (Berkeley Horticultural Nursery)
+                    - "408" (Blossom Hill California Native Plants)
+                    - "415" (Blue Moon Native Garden)
+                    - "521" (Bolsa Chica Conservancy)
+                    - "482" (Bower and Branch)
+                    - "266" (CNL Native Plant Nursery)
+                    - "440" (CNPS)
+                    - "393" (CNPS SCV Nursery)
+                    - "376" (CNPS San Diego Seed and Bulb Sales)
+                    - "214" (Cactus Jungle Nursery and Garden)
+                    - "462" (Cactus Jungle, Marin)
+                    - "215" (Cactus Mart)
+                    - "303" (California Dept. of Forestry - L.A. Moran Reforestation Center)
+                    - "197" (California Flora Nursery)
+                    - "164" (Capitol Wholesale Nursery)
+                    - "455" (Carbon Disco)
+                    - "506" (Caterpillar Chow LLC)
+                    - "304" (Center for Arid Lands Restoration - Joshua Tree National Park)
+                    - "165" (Central Coast Wilds)
+                    - "471" (Chamizos)
+                    - "483" (Clearwater Color Nursery)
+                    - "217" (Clyde Robin Seed Company)
+                    - "407" (Cornflower Farms)
+                    - "218" (Cornflower Farms)
+                    - "300" (Desert Natives Nursery)
+                    - "431" (Devil Mountain Wholesale Nursery - Clements)
+                    - "432" (Devil Mountain Wholesale Nursery - Farmington)
+                    - "433" (Devil Mountain Wholesale Nursery - Fillmore)
+                    - "430" (Devil Mountain Wholesale Nursery - Morgan Hill)
+                    - "429" (Devil Mountain Wholesale Nursery - Petaluma)
+                    - "434" (Devil Mountain Wholesale Nursery - Redondo Beach)
+                    - "435" (Devil Mountain Wholesale Nursery - Rosemead)
+                    - "428" (Devil Mountain Wholesale Nursery - San Ramon)
+                    - "495" (Drought Resistant Nursery)
+                    - "413" (Dry Creek Nursery)
+                    - "229" (East Bay Wilds)
+                    - "472" (El Dorado Nursery & Garden)
+                    - "207" (El Nativo Growers, Inc.)
+                    - "220" (Elderberry Farms Native Plant Nursery)
+                    - "419" (Environmental Nature Center)
+                    - "221" (Euterpe Farms)
+                    - "442" (Evergreen Nursery)
+                    - "480" (Gardenladys)
+                    - "446" (Girasol Nursery, Inc.)
+                    - "226" (Glendora Gardens)
+                    - "426" (Golden Valley Nursery)
+                    - "453" (Grand Lake Ace Garden Center)
+                    - "464" (Grassroots Ecology)
+                    - "305" (Grassroots Ecology Native Plant Nursery)
+                    - "501" (Green Acres Nursery & Supply)
+                    - "502" (Green Acres Nursery & Supply)
+                    - "503" (Green Acres Nursery & Supply)
+                    - "498" (Green Acres Nursery & Supply)
+                    - "500" (Green Acres Nursery & Supply)
+                    - "499" (Green Acres Nursery & Supply)
+                    - "497" (Green Acres Nursery & Supply at Eisley's)
+                    - "524" (Green Thumb International)
+                    - "315" (Greenbelt Growers)
+                    - "481" (GDNC Cactus & Desert Plant Nursery)
+                    - "265" (GGNRA Parks Conservancy -Native Plant Nursery)
+                    - "494" (San Lorenzo Lumber & Garden Center)
+                    - "463" (San Luis Obispo Botanical Garden)
+                    - "208" (San Marcos Growers)
+                    - "225" (Santa Barbara Botanic Garden)
+                    - "183" (Santa Barbara Natives)
+                    - "528" (Seaside Growers Nursery)
+                    - "184" (Seedhunt)
+                    - "409" (Seedhunt.com)
+                    - "311" (Sierra Azul Nursery & Gardens)
+                    - "185" (Sierra Seed Supply)
+                    - "273" (Siskiyou Rare Plant Nursery)
+                    - "312" (SoCal Biology)
+                    - "316" (Sonoma Horticultural Nursery)
+                    - "186" (Sonoma Valley Wholesale Nursery)
+                    - "203" (Stover Seeds)
+                    - "525" (SummerWinds Nursery)
+                    - "485" (Sun Dog Nursery)
+                    - "198" (Suncrest Nurseries, Inc)
+                    - "264" (Sutro Native Plant Nursery)
+                    - "511" (Tahoe Tree Company)
+                    - "256" (Tarweed Native Plants)
+                    - "274" (Tehama Environmental Solutions, Inc.)
+                    - "230" (Telos Rare Bulbs)
+                    - "491" (Terra Wild)
+                    - "465" (The Educated Gardener)
+                    - "299" (The Golden Gecko Garden Center)
+                    - "470" (The Greenery Nursery)
+                    - "188" (The Growing Grounds Farm)
+                    - "287" (The Huntington Botanical Gardens)
+                    - "417" (The Jonsteen Company)
+                    - "418" (The Jonsteen Company)
+                    - "313" (The Living Desert, Palo Verde Garden Center)
+                    - "392" (The Nursery By Southwinds)
+                    - "396" (The Watershed Nursery)
+                    - "189" (Theodore Payne Foundation)
+                    - "406" (Thicket and Vine)
+                    - "473" (Trash Cat Cooperative)
+                    - "190" (Tree of Life Nursery)
+                    - "285" (UC Botanical Garden California Native Plants Nursery)
+                    - "314" (UC Santa Cruz Arboretum)
+                    - "460" (Village Nursery)
+                    - "318" (Villager Nursery)
+                    - "277" (Walker Avenue Nursery)
+                    - "513" (Westbrae Nursery)
+                    - "444" (Western Star Nurseries)
+                    - "459" (Wings of Change)
+                    - "191" (Yerba Buena Nursery)
+      responses:
+        '200':
+          description: A list of Plant records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The unique identifier of the plant
+                    common_name:
+                      type: string
+                      description: The common name of the plant
+                    species:
+                      type: string
+                      description: The scientific species name of the plant
+                    image_url:
+                      type: string
+                      description: The URL of the plant's image
+                    slug:
+                      type: string
+                      description: The URL identifier of the plant to be used for detail requests
+
+components:
+  schemas:
+    PlantDetails:
+      type: object
+      properties:
+        common_name:
+          type: string
+          description: The common name of the plant
+        species:
+          type: string
+          description: The scientific name of the plant species
+        image_url:
+          type: string
+          description: URL of the plant's image
+        description:
+          type: string
+          description: A brief description of the plant
+        plant_type:
+          type: string
+          description: The type of the plant (e.g. tree, shrub)
+        size:
+          type: string
+          description: Size information of the plant
+        form:
+          type: string
+          description: The form or shape of the plant
+        growth_rate:
+          type: string
+          description: The growth rate of the plant
+        dormancy:
+          type: string
+          description: The dormancy state of the plant (e.g. evergreen, deciduous)
+        fragrance:
+          type: string
+          description: The fragrance of the plant
+        flower_color:
+          type: string
+          description: The color of the plant's flowers
+        flowering_season:
+          type: string
+          description: The flowering season of the plant
+        wildlife_supported:
+          type: string
+          description: The types of wildlife supported by the plant
+        sun:
+          type: string
+          description: The sunlight requirements of the plant
+        moisture:
+          type: string
+          description: The moisture requirements of the plant
+        summer_irrigation:
+          type: string
+          description: The summer irrigation requirements of the plant
+        ease_of_care:
+          type: string
+          description: The ease of care of the plant
+        cold_tolerance:
+          type: string
+          description: The cold tolerance of the plant
+        soil_drainage:
+          type: string
+          description: The soil drainage requirements of the plant
+        soil_description:
+          type: string
+          description: A brief description of the soil where the plant grows
+        common_uses:
+          type: string
+          description: The common uses of the plant in landscaping
+        propagation:
+          type: string
+          description: The propagation methods for the plant
+        sunset_zones:
+          type: string
+          description: The Sunset Zones where the plant performs well
+        site_type:
+          type: string
+          description: The type of site where the plant naturally grows
+        climate:
+          type: string
+          description: The climate information of the plant's natural habitat
+        alternative_names:
+          type: string
+          description: Alternative names for the plant
+      required:
+        - common_name
+        - species
+        - image_url
+        - description
+        - plant_type
+        - size
+        - form
+        - growth_rate
+        - dormancy
+        - fragrance
+        - flower_color
+        - flowering_season
+        - wildlife_supported
+        - sun
+        - moisture
+        - summer_irrigation
+        - ease_of_care
+        - cold_tolerance
+        - soil_drainage
+        - soil_description
+        - common_uses
+        - propagation
+        - sunset_zones
+        - site_type
+        - climate
+        - alternative_names
+

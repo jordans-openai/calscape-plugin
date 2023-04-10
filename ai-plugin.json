@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "CalScape Plant Search",
+  "name_for_model": "calscape_plant_search",
+  "description_for_human": "A plugin for the CalScape database",
+  "description_for_model": "Plugin to search native gardening and landscaping plant suggestions for the state of California, USA. The detail endpoint can be used after a search to get more information about a specific plant.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "PLUGIN_HOSTNAME/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "PLUGIN_HOSTNAME/logo.png",
+  "contact_email": "jordans@openai.com",
+  "legal_info_url": "https://example.com/legal"
+}
