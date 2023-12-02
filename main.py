@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import re
 from typing import List
@@ -162,7 +163,8 @@ async def search():
 async def plugin_manifest():
     with open("ai-plugin.json") as f:
         text = f.read()
-        text = text.replace("PLUGIN_HOSTNAME", f"{request.scheme}://{request.headers['Host']}")
+        protocol = "http" if os.getenv("DEV") else "https"
+        text = text.replace("PLUGIN_HOSTNAME", f"{protocol}://{request.headers['Host']}")
         return quart.Response(text, mimetype="text/json")
 
 
@@ -170,7 +172,8 @@ async def plugin_manifest():
 async def openapi_spec():
     with open("calscape.yaml") as f:
         text = f.read()
-        text = text.replace("PLUGIN_HOSTNAME", f"{request.scheme}://{request.headers['Host']}")
+        protocol = "http" if os.getenv("DEV") else "https"
+        text = text.replace("PLUGIN_HOSTNAME", f"{protocol}://{request.headers['Host']}")
         return quart.Response(text, mimetype="text/yaml")
 
 

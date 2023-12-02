@@ -3,6 +3,9 @@ info:
   title: CalScape Plant Search API
   version: 1.0.1
 
+servers:
+  - url: https://calscape.fly.dev
+
 paths:
   /detail/{slug}:
     get:
